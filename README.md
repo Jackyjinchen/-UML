@@ -168,3 +168,112 @@ _下划线表示static
 鸟和翅膀就是组合关系，因为它们是部分和整体的关系，并且翅膀和鸟的生命周期是相同的。
 
 <img src="README.assets\5336514-dfb604bd1c4408d5.png" alt="img" style="zoom:80%;" />
+
+
+
+## 设计模式概述
+
+### 设计模式分类
+
+1. **创建型模式**：**单例模式**、抽象工厂模式、原型模式、建造者模式、**工厂模式**
+2. **结构型模式**：适配器模式、桥接模式、**装饰模式**、组合模式、外观模式、享元模式、**代理模式**
+3. **行为型模式**：模板方法模式、命令模式、访问者模式、迭代器模式、**观察者模式**、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、责任链模式
+
+
+
+#### 单例模式
+
+##### 1. 饿汉式（静态常量）
+
+可能造成内存浪费，避免了多线程同步问题
+
+```java
+class Singleton() {
+    // 构造器私有化
+    private Singleton() {}
+    //本类创建
+    private final static Singleton instance = new Singleton();
+    //提供getter
+    public getInstance() {
+        return instance;
+    }
+    
+}
+```
+
+##### 2. 饿汉式（静态代码块）
+
+同理造成内存浪费
+
+```java
+class Singleton() {
+    private static Singleton instance;
+    //通过静态代码块创建单例对象
+    static {
+        instance = new Singleton();
+    }
+    //提供getter
+    public getInstance() {
+        return instance;
+    }
+    
+}
+```
+
+##### 3. 懒汉式（线程不安全）
+
+```java
+class Singleton() {
+    private static Singleton instance;
+    private Singleton() {}
+    //提供getter
+    public static Singleton getInstance() {
+        if(instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+    
+}
+```
+
+##### 4. 懒汉式（线程安全）
+
+方法同步效率太低
+
+```java
+class Singleton() {
+    private static Singleton instance;
+    private Singleton() {}
+    //提供getter
+    public static synchronized Singleton getInstance() {
+        if(instance == null) {
+            instance = new Singleton();
+        }
+        return instance;
+    }
+    
+}
+```
+
+##### 5. 双重检查
+
+```java
+class Singleton() {
+    //volatile 禁止指令重排
+    private static volatile Singleton instance;
+    private Singleton() {}
+    public static Singleton getInstance() {
+        if(instance == null) {
+            synchronized (Singleton.class) {
+                if(instance == null) {
+                    instance = new Singleton();
+                }
+            }
+        }
+        return instance;
+    }
+    
+}
+```
+
