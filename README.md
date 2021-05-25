@@ -52,7 +52,7 @@
 
 #### 1.类图基础属性
 
-<img src="https:////upload-images.jianshu.io/upload_images/5336514-d05e8edc42eb1469.png?imageMogr2/auto-orient/strip|imageView2/2/w/512/format/webp" alt="img" style="zoom: 33%;" />
+<img src="C:\Users\jacky\Desktop\Note\README.assets\5336514-d05e8edc42eb1469.png" alt="img" style="zoom:33%;" />
 
 ```none
 -表示private  
@@ -66,7 +66,7 @@ _下划线表示static
 
 在UML类图中，常见的有以下几种关系: **泛化（Generalization）, 实现（Realization），关联（Association)，聚合（Aggregation），组合(Composition)，依赖(Dependency)**
 
-![img](https:////upload-images.jianshu.io/upload_images/5336514-985132f6977c5d33.png?imageMogr2/auto-orient/strip|imageView2/2/w/694/format/webp)
+![img](C:\Users\jacky\Desktop\Note\README.assets\5336514-985132f6977c5d33.png)
 
 ##### 2.1泛化
 
@@ -84,7 +84,7 @@ _下划线表示static
 
  鸟类继承抽象类动物
 
-![img](https:////upload-images.jianshu.io/upload_images/5336514-dc3ac9dd64968b59.png?imageMogr2/auto-orient/strip|imageView2/2/w/231/format/webp)
+![img](C:\Users\jacky\Desktop\Note\README.assets\5336514-dc3ac9dd64968b59.png)
 
 （2）实现
  **介绍：**   
@@ -97,13 +97,13 @@ _下划线表示static
 ​	 	使用**空心三角形+虚线**表示
  		比如：大雁需要飞行，就要实现飞()接口
 
-<img src="https:////upload-images.jianshu.io/upload_images/5336514-2941b3300988ffe9.png?imageMogr2/auto-orient/strip|imageView2/2/w/314/format/webp" alt="img" style="zoom: 67%;" />
+<img src="C:\Users\jacky\Desktop\Note\README.assets\5336514-2941b3300988ffe9.png" alt="img" style="zoom:67%;" />
 
 ​	2）**棒棒糖表示法**  
 
 ​		使用**实线**表示
 
-![img](https:////upload-images.jianshu.io/upload_images/5336514-ad59831e8065522a.png?imageMogr2/auto-orient/strip|imageView2/2/w/313/format/webp)
+![img](C:\Users\jacky\Desktop\Note\README.assets\5336514-ad59831e8065522a.png)
 
 ##### 2.2依赖
 
@@ -119,7 +119,7 @@ _下划线表示static
 
  动物依赖氧气和水。调用新陈代谢方法需要氧气类与水类的实例作为参数
 
-![img](https:////upload-images.jianshu.io/upload_images/5336514-823083d2d77916ae.png?imageMogr2/auto-orient/strip|imageView2/2/w/414/format/webp)
+![img](C:\Users\jacky\Desktop\Note\README.assets\5336514-823083d2d77916ae.png)
 
 ##### 2.3关联
 
@@ -135,7 +135,7 @@ _下划线表示static
 
 企鹅需要‘知道’气候的变化，需要‘了解’气候规律。当一个类‘知道’另一个类时，可以用关联。
 
-![img](https:////upload-images.jianshu.io/upload_images/5336514-0b5f0d7612a7ca17.png?imageMogr2/auto-orient/strip|imageView2/2/w/271/format/webp)
+![img](C:\Users\jacky\Desktop\Note\README.assets\5336514-0b5f0d7612a7ca17.png)
 
 ##### 2.4聚合
 
@@ -151,7 +151,7 @@ _下划线表示static
 
 每一只大雁都属于一个大雁群，一个大雁群可以有多只大雁。当大雁死去后大雁群并不会消失，两个对象生命周期不同。
 
-![img](https:////upload-images.jianshu.io/upload_images/5336514-e63191f4e23f2ad9.png?imageMogr2/auto-orient/strip|imageView2/2/w/297/format/webp)
+![img](C:\Users\jacky\Desktop\Note\README.assets\5336514-e63191f4e23f2ad9.png)
 
 ##### 2.5组合
 
@@ -167,4 +167,4 @@ _下划线表示static
 
 鸟和翅膀就是组合关系，因为它们是部分和整体的关系，并且翅膀和鸟的生命周期是相同的。
 
-![img](https:////upload-images.jianshu.io/upload_images/5336514-dfb604bd1c4408d5.png?imageMogr2/auto-orient/strip|imageView2/2/w/365/format/webp)
+![img](C:\Users\jacky\Desktop\Note\README.assets\5336514-dfb604bd1c4408d5.png)
