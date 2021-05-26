@@ -467,3 +467,7 @@ public class VoltageAdapter extends Voltage220V implements IVoltage5V {
 }
 ```
 
+##### 2. 对象适配器
+
+![img](README.assets/851491-20210315003103679-308368199.png)
+
