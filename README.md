@@ -2,7 +2,7 @@
 
 代码重用性、可读性、可扩展性、可靠性、高内聚低耦合
 
-##  设计模式七大原则：
+##  设计模式七大原则
 
 1. 单一职责原则
 
@@ -179,9 +179,11 @@ _下划线表示static
 2. **结构型模式**：适配器模式、桥接模式、**装饰模式**、组合模式、外观模式、享元模式、**代理模式**
 3. **行为型模式**：模板方法模式、命令模式、访问者模式、迭代器模式、**观察者模式**、中介者模式、备忘录模式、解释器模式、状态模式、策略模式、责任链模式
 
+### 创建型模式
 
+#### 单例模式 Singleton
 
-#### 单例模式
+java中java.lang.Runtime 就是单例模式
 
 ##### 1. 饿汉式（静态常量）
 
@@ -272,8 +274,196 @@ class Singleton() {
             }
         }
         return instance;
+    } 
+}
+```
+
+##### **6. 静态内部类**
+
+```java
+class Singleton() {
+  private Singleton() {}
+  //懒加载 线程安全 静态内部类
+  public static class SingletonInstance {
+    private static final Singleton INSTANCE = new Singleton();
+  }
+  public static Singleton getInstance() {
+    return SingletonInstance.INSTANCE;
+  }
+}
+```
+
+##### **7. 枚举**
+
+避免多线程，还能防止反序列化重新创建新的对象
+
+```java
+enum Singleton {
+  //属性单一
+  INSTANCE;
+  public vod sayOK() {}
+}
+```
+
+
+
+#### 工厂模式 Factory
+
+java中Calendar就是工厂模式
+
+##### 1. 简单工厂模式
+
+<img src="README.assets/1419489-20190628144601084-563759643.png" alt="img"  />
+
+```java
+public class PhoneFactory {
+    public Phone makePhone(String phoneType) {
+        if(phoneType.equalsIgnoreCase("MiPhone")){
+            return new MiPhone();
+        }
+        else if(phoneType.equalsIgnoreCase("iPhone")) {
+            return new IPhone();
+        }
+        return null;
     }
-    
+}
+```
+
+##### 2. 工厂方法模式
+
+定义一个抽象工厂，定义生产接口但不具体负责产品，交给派生类工厂来生产。
+
+<img src="README.assets/1419489-20190628154133368-906051111.png" alt="img"  />
+
+```java
+public interface AbstractFactory {
+    Phone makePhone();
+}
+```
+
+##### 3. 抽象工厂模式
+
+在AbstractFactory增加创建产品的接口，在具体子工厂中实现新加产品的创建。
+
+<img src="README.assets/1419489-20190628170705865-1781414242.png" alt="img"  />
+
+#### 原型模式 Prototype
+
+可以简化创建对象过程。需要为每一个类配备克隆方法，对于已有类进行改造时违背了OCP原则
+
+java中Object类是所有类的根类，提供一个clone()方法，可以复制对象，需要实现接口Cloneable**（浅拷贝）**
+
+spring中创建bean可以采用原型模式
+
+```xml
+<bean id="id01" class="com.jackyjinchen.bean.Test" scope="prototype"/>
+```
+
+<img src="README.assets/image-20210526141212575.png" alt="image-20210526141212575" style="zoom:50%;" />
+
+```java
+// Cloneable 浅拷贝
+// clone方法的原理是从堆内存中以二进制流的方式进行拷贝，直接分配一块新内存。
+public abstract class Shape implements Cloneable {
+   //.......
+   @Override
+   public Object clone() {
+      Object clone = null;
+      try {
+         clone = super.clone();
+      } catch (CloneNotSupportedException e) {
+         e.printStackTrace();
+      }
+      return clone;
+   }
+}
+```
+
+
+
+```java
+// 深拷贝
+public class DeepProtoType impements Serializable, Cloneable {
+  public DeepCloneableTarget deepCloneableTarget; //引用类型
+  
+  // 方法1
+  @Override
+  public Object clone() {
+    Object clone = null;
+    try {
+      //基本数据属性克隆
+      clone = super.clone();
+      //对应用类型的属性，进行单独处理
+      DeepProtoType deep = (DeepProtoType)deep;
+      deep.deepCloneableTarget = (DeepCloneableTarget)deepCloneableTarget.clone();
+    } catch (CloneNotSupportedException e) {
+      e.printStackTrace();
+    }
+    return clone;
+  }
+  
+  // 方法2
+  public DeepProtoType deepClone() throws Exception {
+    DeepProtoType clone = null;
+    try {
+      //将对象写到流里
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      ObjectOutputStream oos = new ObjectOutputStream(bos);
+      oos.writeObject(this);
+      //从流中读出来
+      ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+      ObjectInputStream ois = new ObjectInputStream(bis);
+      clone = (DeepProtoType) ois.readObject();
+    } catch (CloneNotSupportedException e) {
+      e.printStackTrace();
+    } finally {
+      bos.close();
+      oos.close();
+      bis.close();
+      ois.close();
+    }
+    return clone;
+  }
+}
+```
+
+#### 建造者模式 Builder
+
+java中的StringBuilder就是建造者模式
+
+<img src="README.assets/5249989-47951dd84e86a38d.png" alt="img" style="zoom:67%;" />
+
+（1） 抽象产品类 computer。
+（2） Builder 抽象 Builder，规范产品的组建，一般是由子类实现具体的组建过程。
+（3）MacbookBuilder 具体的Builder类，具体的创建对象的类。
+（4） Directror 统一组建过程。
+
+### 结构型模式
+
+#### 适配器模式 Adapter
+
+将某个类的接口转换成客户端期望的另一个接口表示，主要目的是**兼容性**，别名包装器（Wrapper）。
+
+(1). 目标（Target）接口：当前系统业务所期待的接口，它可以是抽象类或接口。
+(2). 适配者（Adaptee）类：它是被访问和适配的现存组件库中的组件接口。
+(3). 适配器（Adapter）类：它是一个转换器，通过继承或引用适配者的对象，把适配者接口转换成目标接口，让客户按目标接口的格式访问适配者。
+
+##### 1. 类适配器
+
+<img src="README.assets/851491-20210315002749450-1017910209.png" alt="img"  />
+
+```java
+// 适配器类
+public class VoltageAdapter extends Voltage220V implements IVoltage5V {
+    // 通过实现接口的方法将电压转化
+    @Override
+    public int output5V() {
+        // 获取到 220V 电压
+        int srcV = output220V();
+        // 转成 5V
+        intdstV = srcV / 44;
+        return dstV;
+    }
 }
 ```
 
