@@ -444,6 +444,8 @@ java中的StringBuilder就是建造者模式
 
 将某个类的接口转换成客户端期望的另一个接口表示，主要目的是**兼容性**，别名包装器（Wrapper）。
 
+SpinrgMVC 中的HandlerAdapter是使用适配器模式实现的
+
 (1). 目标（Target）接口：当前系统业务所期待的接口，它可以是抽象类或接口。
 (2). 适配者（Adaptee）类：它是被访问和适配的现存组件库中的组件接口。
 (3). 适配器（Adapter）类：它是一个转换器，通过继承或引用适配者的对象，把适配者接口转换成目标接口，让客户按目标接口的格式访问适配者。
@@ -470,4 +472,55 @@ public class VoltageAdapter extends Voltage220V implements IVoltage5V {
 ##### 2. 对象适配器
 
 ![img](README.assets/851491-20210315003103679-308368199.png)
+
+```java
+// 适配器类
+public class VoltageAdapter implements IVoltage5V {
+
+    // 关联关系-聚合
+    private Voltage220V voltage220V;
+
+    // 通过构造器，传入一个 Voltage220V 实例
+    public VoltageAdapter(Voltage220V voltage220v) {
+        this.voltage220V = voltage220v;
+    }
+
+    @Override
+    public int output5V() {
+        int dst = 0;
+        if(null != voltage220V) {
+            // 获取 220V 电压
+            int src = voltage220V.output220V();
+            System.out.println("使用对象适配器，进行适配~~");
+            dst = src / 44;
+            System.out.println("适配完成，输出的电压为=" + dst);
+        }
+        return dst;
+    }
+}
+```
+
+##### 3. 接口适配器
+
+适配器模式（Default Adapter Pattern）或缺省适配器模式
+
+<img src="README.assets/o_adapter-default-adapter.jpg" alt="缺省适配器模式结构图" style="zoom: 67%;" />
+
+不需实现接口提供的全部方法，可以设计一个抽象类实现接口，每个方法提供一个默认实现，抽象类子类选择覆盖方法实现。
+
+##### SpringMVC Dispatcher
+
+![img](README.assets/278b0cf814fffe00e57544dd1088346f.png)
+
+1. 首先浏览器发送请求给`DispatcherServlet`。
+2. 前端控制器通过处理器映射器得到对应的映射路径。
+3. 然后通过处理器适配器得到对应`controller`执行业务返回数据。
+4. 通过视图解析器处理视图。
+5. 返回视图给浏览器。
+
+#### 桥接模式
+
+将实现与抽象放在两个不同的类层次中，是两个层次可以独立改变。基于类的**最小设计原则**
+
+<img src="README.assets/webp" alt="img" style="zoom:67%;" />
 
