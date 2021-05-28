@@ -518,9 +518,37 @@ public class VoltageAdapter implements IVoltage5V {
 4. 通过视图解析器处理视图。
 5. 返回视图给浏览器。
 
-#### 桥接模式
+#### 桥接模式 Bridge
 
 将实现与抽象放在两个不同的类层次中，是两个层次可以独立改变。基于类的**最小设计原则**
 
 <img src="README.assets/webp" alt="img" style="zoom:67%;" />
+
+JDBC的Driver接口，是一个接口类。
+
+<img src="README.assets/1878920-20200603160703960-65423197.png" alt="img" style="zoom: 50%;" />
+
+桥接模式引入增加了系统的理解和设计难度，由于聚合关系建立在抽象层，要求开发者针对抽象进行设计和编程。
+
+#### 装饰者模式 Decoration
+
+装饰类和被装饰类独立发展，不会相互耦合，是集成的一个替代模式，可以动态扩展一个实现类的功能。
+
+<img src="README.assets/1216886-20190922011430803-958922094.png" alt="img" style="zoom: 67%;" />
+
+java的I/O中使用了装饰者模式
+
+<img src="README.assets/1216886-20190922012926406-314109345.png" alt="img" style="zoom: 67%;" />
+
+#### 组合模式 Composite
+
+<img src="README.assets/image-20210528152604708.png" alt="image-20210528152604708" style="zoom: 33%;" />
+
+1. 抽象构件角色(Component)：是组合中对象声明接口，实现所有类共有接口的默认行为。
+2. 树叶构件角色(Leaf)：上述提到的单个对象，叶节点没有子节点。
+3. 树枝构件角色(Composite)：定义有子部件的组合部件行为，存储子部件，在Component接口中实现与子部件有关的操作。
+
+java中的集合类HashMap就是用了组合模式。
+
+ 
 
