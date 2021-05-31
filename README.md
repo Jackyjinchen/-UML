@@ -542,13 +542,29 @@ java的I/O中使用了装饰者模式
 
 #### 组合模式 Composite
 
+方便创建出复杂的层次结构，具有较强的扩展性。如果节点和叶子有很多差异性的话，不适合使用组合模式。
+
 <img src="README.assets/image-20210528152604708.png" alt="image-20210528152604708" style="zoom: 33%;" />
 
 1. 抽象构件角色(Component)：是组合中对象声明接口，实现所有类共有接口的默认行为。
 2. 树叶构件角色(Leaf)：上述提到的单个对象，叶节点没有子节点。
 3. 树枝构件角色(Composite)：定义有子部件的组合部件行为，存储子部件，在Component接口中实现与子部件有关的操作。
 
-java中的集合类HashMap就是用了组合模式。
+java中的集合类**HashMap**就是用了组合模式。
 
- 
+<img src="README.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMzM5MjEw,size_16,color_FFFFFF,t_70-20210531091625322.png" alt="在这里插入图片描述" style="zoom:67%;" />
+
+1. Map 就是一个抽象的构件，类似于组合模式中的Component；
+2. HashMap是中间的构件，只不过在HashMap与Component之间多了一层AbstractMap<K,V>，并且重写了Map中put()，putAll()等方法；
+3. Node是HashMap中的静态内部类，类似于Leaf叶子节点
+
+#### 外观模式 Facade
+
+定义一个高层接口，包含对各个子系统的引用。
+
+<img src="README.assets/3-1Q115152143509.gif" alt="外观模式的结构图" style="zoom:67%;" />
+
+MyBatis框架中Configration去创建MetaObject对象使用到外观模式。
+
+#### 享元模式 Flyweight
 
