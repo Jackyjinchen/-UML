@@ -568,3 +568,153 @@ MyBatis框架中Configration去创建MetaObject对象使用到外观模式。
 
 #### 享元模式 Flyweight
 
+运用共享技术有效地支持大量细粒度的对象。常用于系统底层开发，解决系统性能问题，如数据库连接池等各种池技术。可以解决重复对象的内存浪费问3没出发呢题。
+
+<img src="README.assets/1018770-20180521224951802-1630441597-20210602102006945.png" alt="img"  />
+
+1. Flyweight是抽象享元角色。它是产品的抽象类，同时定义出对象的外部状态和内部状态的接口或实现；
+2. ConcreteFlyweight是具体享元角色，是具体的产品类，实现抽象角色定义的业务；
+3. UnsharedConcreteFlyweight是不可共享的享元角色，一般不会出现在享元工厂中；
+4. FlyweightFactory是享元工厂，它用于构造一个池容器，同时提供从池中获得对象的方法。
+
+  jdk中Interger源码中采用了享元模式
+
+```java
+// valueOf使用了享元模式，在-128 -- 127 直接使用享元模式返回，否则new一个对象。执行速度比new快。
+Integer x = Integer.valueOf(127);
+Integer y = new Integer(127);
+Integer z = Integer.valueOf(127);
+Integer w = new Integer(127);
+System.out.println( x.equal(y) ); // true
+System.out.println( x == y ); // false
+System.out.println( x == z ); // true
+System.out.println( w == x ); // false
+System.out.println( w == y ); // false
+```
+
+#### 代理模式 Proxy
+
+为对象提供一个替身，实现功能增强。被代理的对象可以使远程对象、创建开销大的对象或者需要安全控制的对象。
+
+代理模式主要有三种：静态代理、动态代理（JDK代理、接口代理）、Cglib代理（可以在内存中动态创建对象，而不需要实现接口）
+
+##### 静态代理
+
+<img src="README.assets/70-20210602144117096.png" alt="这里写图片描述"  />
+
+1. 定义接口ITeacherDAO
+2. 目标对象TeacherDAO实现ITeacherDAO
+3. TeacherDAOProxy实现ITeacherDAO，调用时候通过调用代理对象方法来调用目标对象。
+
+##### 动态代理
+
+<img src="README.assets/70.png" alt="这里写图片描述"  />
+
+代理类所在包：java.lang.reflect.Proxy
+
+JDK实现代理只需要使用newProxyInstance方法
+
+```java
+// 1、类加载器
+// 2、目标对象实现的接口类型，使用泛型方法确认类型
+// 3、事情处理，执行目标对象的方法时，会触发事件处理器方法。
+static Object newProxyInstance(ClassLoader loader, Class<?>[] interfaces, InvocationHandler h)
+```
+
+```java
+public Object getProxyInstance() {
+  return Proxy.newProxyInstance(target.getClass().getClassLoader(),
+       target.getClass().getInterfaces(),
+       new InvocationHandler() {
+         @Override
+         public Object invoke(Object proxy, Method method, Object[] args) {
+           Object returnVal = method.invoke(target, args);
+           return returnVal;
+         }
+       })
+}
+```
+
+##### Cglib代理
+
+被广泛应用于AOP框架，如Spring AOP，实现方法拦截。目标对象需要实现接口使用JDK代理，不需要则使用Cglib代理。
+
+1. 引入jar包
+
+   asm.jar
+   asm.commons.jar
+   asm-tree.jar
+   cglib.jar
+
+2. 代理的类不能为final，否则报错java.lang.illegalArgumentException
+3. 目标对象的方法如果为final/static，那么就不会被拦截。
+
+```java
+public class ProxyFactory implements MethodInterceptor {
+  private Object target;
+  
+  public ProxyFactory(Object target) {
+    this.target = target;
+  }
+  
+  public Object getProxyInstance() {
+    //创建工具类
+    Enhancer enhancer = new Enhancer();
+    //设置父类
+    enhancer.setSuperclass(target.getClass());
+    //设置回调函数
+    enhancer.setCallback(this);
+    //创建子类对象，即代理对象
+    return enhancer.create();
+  }
+  
+  @Override
+  public Object intercept(Object arg0, Method method, Object[] args, MethodProxy arg3) throw Throwable {
+    Object returnVal = method.invoke(target, args);
+    return returnVal;
+  }
+}
+```
+
+##### 动态代理和Cglib的区别
+
+1. Java动态代理只能够对接口进行代理，不能对普通的类进行代理（因为所有生成的代理类的父类为Proxy，Java类继承机制不允许多重继承）；CGLIB能够代理普通类；
+2. Java动态代理使用Java原生的反射API进行操作，在生成类上比较高效；CGLIB使用ASM框架直接对字节码进行操作，在类的执行过程中比较高效
+
+### 行为型模式
+
+#### 模板模式 Template
+
+在一个抽象类公开定义了执行它的方法的模板，它的子类可以按需要重写方法实现，但调用将以抽象类中定义的方式进行。
+
+<img src="README.assets/20160505182625611.png" alt="img" style="zoom:50%;" />
+
+templateMethod()中定义方法的基本步骤（可以做成final，不让子类去覆盖），ConcreteClass实现抽象方法中的doSomething()、doAnything()
+
+##### 钩子方法
+
+定义一个方法默认不做任何事，子类可以视情况覆盖，称之为“钩子”，可以用钩子方法对前面的模板进行改造。
+
+```java
+//在AbstractClass中定义一个钩子，在子类中覆盖他为return false，在运行时判断从而改变方法。
+protected boolean customer() {
+  return true;
+}
+```
+
+Spring框架中IOC容器初始化时用到了模板方法模式。
+
+<img src="README.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMzM5MjEw,size_16,color_FFFFFF,t_70-2623161.png" alt="在这里插入图片描述" style="zoom: 50%;" />
+
+#### 命令模式 Command
+
+命令模式将动作的请求者从动作的执行着对象中解耦出来。
+
+<img src="README.assets/image-20210602165302056.png" alt="image-20210602165302056" style="zoom: 50%;" />
+
+1. **客户端(Client)角色：**创建一个具体命令(ConcreteCommand)对象并确定其接收者。
+2. **命令(Command)角色：**声明了一个给所有具体命令类的抽象接口。
+3. **具体命令(ConcreteCommand)角色：**定义一个接收者和行为之间的弱耦合；实现execute()方法，负责调用接收者的相应操作。execute()方法通常叫做执行方法。
+4. **请求者(Invoker)角色：**负责调用命令对象执行请求，相关的方法叫做行动方法。
+5. **接收者(Receiver)角色：**负责具体实施和执行一个请求。任何一个类都可以成为接收者，实施和执行请求的方法叫做行动方法。
+
