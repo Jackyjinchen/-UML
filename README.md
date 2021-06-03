@@ -718,3 +718,25 @@ Spring框架中IOC容器初始化时用到了模板方法模式。
 4. **请求者(Invoker)角色：**负责调用命令对象执行请求，相关的方法叫做行动方法。
 5. **接收者(Receiver)角色：**负责具体实施和执行一个请求。任何一个类都可以成为接收者，实施和执行请求的方法叫做行动方法。
 
+​		小女孩茱丽(Julia)有一个盒式录音机，此录音机有播音(Play)、倒带(Rewind)和停止(Stop)功能，录音机的键盘便是请求者(Invoker)角色；茱丽(Julia)是客户端角色，而录音机便是接收者角色。Command类扮演抽象命令角色，PlayCommand、StopCommand和RewindCommand便是具体命令类。茱丽(Julia)不需要知道播音(play)、倒带(rewind)和停止(stop)功能是怎么具体执行的，这些命令执行的细节全都由键盘(Keypad)具体实施。茱丽(Julia)只需要在键盘上按下相应的键便可以了。
+
+<img src="README.assets/image-20210603144033246.png" alt="image-20210603144033246" style="zoom:67%;" />
+
+Spring框架中JdbcTemplate就使用到了命令模式
+
+<img src="README.assets/20200426002752.png" alt="img" style="zoom:50%;" />
+
+query()方法定义了内部类QueryStatementCallback（实现了StatementCallback接口），在query()中又调用了execute()调用StatementCallback中的doInStatement()。
+
+#### 访问者模式 Visitor
+
+将数据结构和数据操作分离，
+
+<img src="README.assets/v2-b6aae045fbd53c74bb1cc5e97c3f006d_1440w.jpg" alt="img"  />
+
+1. Vistor（抽象访问者）：为该对象结构中具体元素角色声明一个访问操作接口。就好像是王者荣耀里面不同的玩家。
+2. ConcreteVisitor（具体访问者）：每个具体访问者都实现了Vistor中定义的操作。就好比是具体某一个玩家。
+3. Element（抽象元素）：定义了一个accept操作，以Visitor作为参数。可以类比成王者里面英雄的模板。
+4. ConcreteElement（具体元素）：实现了Element中的accept()方法，调用Vistor的访问方法以便完成对一个元素的操作。可以表示为具体某一个英雄，好比是庄周和甄姬。
+5. ObjectStructure（对象结构）：可以是组合模式，也可以是集合；能够枚举它包含的元素；提供一个接口，允许Vistor访问它的元素。也就是庄周和甄姬允许外界访问的元素。
+
