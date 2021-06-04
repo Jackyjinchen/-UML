@@ -730,7 +730,7 @@ query()方法定义了内部类QueryStatementCallback（实现了StatementCallba
 
 #### 访问者模式 Visitor
 
-将数据结构和数据操作分离，
+将数据结构和数据操作分离，符合**单一职责原则**，可以做报表、拦截器与过滤器、UI，适用于数据结构相对稳定的系统。但违背了**依赖倒转原则**，访问者依赖的是具体元素。
 
 <img src="README.assets/v2-b6aae045fbd53c74bb1cc5e97c3f006d_1440w.jpg" alt="img"  />
 
@@ -740,3 +740,32 @@ query()方法定义了内部类QueryStatementCallback（实现了StatementCallba
 4. ConcreteElement（具体元素）：实现了Element中的accept()方法，调用Vistor的访问方法以便完成对一个元素的操作。可以表示为具体某一个英雄，好比是庄周和甄姬。
 5. ObjectStructure（对象结构）：可以是组合模式，也可以是集合；能够枚举它包含的元素；提供一个接口，允许Vistor访问它的元素。也就是庄周和甄姬允许外界访问的元素。
 
+#### 迭代器模式 Iterator
+
+提供统一方法遍历对象，无需考虑聚合的类型。
+
+<img src="README.assets/image-20210604093951191.png" alt="image-20210604093951191" style="zoom:50%;" />
+
+1. 抽象聚合（Aggregate）角色：定义存储、添加、删除聚合对象以及创建迭代器对象的接口。
+2. 具体聚合（ConcreteAggregate）角色：实现抽象聚合类，返回一个具体迭代器的实例。
+3. 抽象迭代器（Iterator）角色：定义访问和遍历聚合元素的接口，通常包含 hasNext()、first()、next() 等方法。
+4. 具体迭代器（Concretelterator）角色：实现抽象迭代器接口中所定义的方法，完成对聚合对象的遍历，记录遍历的当前位置。
+
+Java中ArrayList使用了迭代器模式
+
+![img](README.assets/src=http%3A%2F%2Fimg2018.cnblogs.com%2Fblog%2F1532854%2F201906%2F1532854-20190604200115297-619001579.png&refer=http%3A%2F%2Fimg2018.cnblogs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg)
+
+##### Java的数据结构类图
+
+<img src="README.assets/image-20210604105141707.png" alt="image-20210604105141707" style="zoom:33%;" />
+
+#### 观察者模式 Observer
+
+<img src="README.assets/3-1Q1161A6221S.gif" alt="观察者模式的结构图" style="zoom:67%;" />
+
+1. 抽象主题（Subject）角色：也叫抽象目标类，它提供了一个用于保存观察者对象的聚集类和增加、删除观察者对象的方法，以及通知所有观察者的抽象方法。
+2. 具体主题（Concrete Subject）角色：也叫具体目标类，它实现抽象目标中的通知方法，当具体主题的内部状态发生改变时，通知所有注册过的观察者对象。
+3. 抽象观察者（Observer）角色：它是一个抽象类或接口，它包含了一个更新自己的抽象方法，当接到具体主题的更改通知时被调用。
+4. 具体观察者（Concrete Observer）角色：实现抽象观察者中定义的抽象方法，以便在得到目标的更改通知时更新自身的状态。
+
+JDK中Observer、Observerable使用了观察者模式
