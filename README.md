@@ -1,4 +1,4 @@
-面临**耦合性、内聚性、可维护性、可扩展性、重用性、灵活性**等方面挑战，通过设计模式使程序具有更好的：
+   面临**耦合性、内聚性、可维护性、可扩展性、重用性、灵活性**等方面挑战，通过设计模式使程序具有更好的：
 
 代码重用性、可读性、可扩展性、可靠性、高内聚低耦合
 
@@ -768,4 +768,213 @@ Java中ArrayList使用了迭代器模式
 3. 抽象观察者（Observer）角色：它是一个抽象类或接口，它包含了一个更新自己的抽象方法，当接到具体主题的更改通知时被调用。
 4. 具体观察者（Concrete Observer）角色：实现抽象观察者中定义的抽象方法，以便在得到目标的更改通知时更新自身的状态。
 
-JDK中Observer、Observerable使用了观察者模式
+JDK中Observer、Observerable使用了观察者模式（java.util.Observable）
+
+#### 中介者模式 Mediator
+
+使用中介对象封装一些列队向交互，从而使对象间耦合松散，可以独立的改变他们之间的交互。MVC框架中控制器就是模型和视图的中介者。
+
+<img src="README.assets/image-20210604140704748.png" alt="image-20210604140704748" style="zoom: 33%;" />
+
+1. 抽象中介者（Mediator）角色：它是中介者的接口，提供了同事对象注册与转发同事对象信息的抽象方法。
+2. 具体中介者（ConcreteMediator）角色：实现中介者接口，定义一个 List 来管理同事对象，协调各个同事角色之间的交互关系，因此它依赖于同事角色。
+3. 抽象同事类（Colleague）角色：定义同事类的接口，保存中介者对象，提供同事对象交互的抽象方法，实现所有相互影响的同事类的公共功能。
+4. 具体同事类（Concrete Colleague）角色：是抽象同事类的实现者，当需要与其他同事对象交互时，由中介者对象负责后续的交互。
+
+#### 备忘录模式 Memento
+
+如果类成员变量过多，势必会占用比较大的资源。
+
+<img src="README.assets/1002892-20181224194308185-750390700.png" alt="img" style="zoom: 33%;" />
+
+#### 解释器模式 Interpreter
+
+在编译原理中，一个算术表达式通过词法分析器形成词法单元，而后这些词法单元再通过语法分析器构建语法分析树，最终形成一个抽象的语法分析树。这里的词法分析器和语法分析器都可以看作是解释器。
+
+<img src="README.assets/3-1Q119150626422.gif" alt="解释器模式的结构图" style="zoom:67%;" />
+
+1. 抽象表达式（Abstract Expression）角色：定义解释器的接口，约定解释器的解释操作，主要包含解释方法 interpret()。
+2. 终结符表达式（Terminal Expression）角色：是抽象表达式的子类，用来实现文法中与终结符相关的操作，文法中的每一个终结符都有一个具体终结表达式与之相对应。
+3. 非终结符表达式（Nonterminal Expression）角色：也是抽象表达式的子类，用来实现文法中与非终结符相关的操作，文法中的每条规则都对应于一个非终结符表达式。
+4. 环境（Context）角色：通常包含各个解释器需要的数据或是公共的功能，一般用来传递被所有解释器共享的数据，后面的解释器可以从这里获取这些值。
+5. 客户端（Client）：主要任务是将需要分析的句子或表达式转换成使用解释器对象描述的抽象语法树，然后调用解释器的解释方法，当然也可以通过环境角色间接访问解释器的解释方法。
+
+##### 范例
+
+<img src="https://img2018.cnblogs.com/blog/1018770/201905/1018770-20190528165820619-1597859436.png" alt="img" style="zoom:67%;" />
+
+**解析器封装类**
+
+```java
+public class Calculator {
+
+    //定义表达式
+    private Expression expression;
+
+    //构造函数传参，并解析
+    public Calculator(String expStr) {
+        //安排运算先后顺序
+        Stack<Expression> stack = new Stack<>();
+        //表达式拆分为字符数组
+        char[] charArray = expStr.toCharArray();
+
+        Expression left = null;
+        Expression right = null;
+        for(int i=0; i<charArray.length; i++) {
+            switch (charArray[i]) {
+            case '+':    //加法
+                left = stack.pop();
+                right = new VarExpression(String.valueOf(charArray[++i]));
+                stack.push(new AddExpression(left, right));
+                break;
+            case '-':    //减法
+                left = stack.pop();
+                right = new VarExpression(String.valueOf(charArray[++i]));
+                stack.push(new SubExpression(left, right));
+                break;
+            default:    //公式中的变量
+                stack.push(new VarExpression(String.valueOf(charArray[i])));
+                break;
+            }
+        }
+        this.expression = stack.pop();
+    }
+
+    //计算
+    public int run(HashMap<String, Integer> var) {
+        return this.expression.interpreter(var);
+    }
+}
+```
+
+**抽象表达式类**
+
+```java
+public abstract class Expression {
+    //解析公式和数值，key是公式中的参数，value是具体的数值
+    public abstract int interpreter(HashMap<String, Integer> var);
+}
+```
+
+**变量解析器**
+
+```java
+public class VarExpression extends Expression {
+
+    private String key;
+
+    public VarExpression(String key) {
+        this.key = key;
+    }
+
+    @Override
+    public int interpreter(HashMap<String, Integer> var) {
+        return var.get(this.key);
+    }
+
+}
+```
+
+**符号解析器**
+
+```java
+public class SymbolExpression extends Expression {
+
+    protected Expression left;
+    protected Expression right;
+
+    public SymbolExpression(Expression left, Expression right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public int interpreter(HashMap<String, Integer> var) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+}
+```
+
+**加法解析器**
+
+```java
+public class AddExpression extends SymbolExpression {
+
+    public AddExpression(Expression left, Expression right) {
+        super(left, right);
+    }
+
+    public int interpreter(HashMap<String, Integer> var) {
+        return super.left.interpreter(var) + super.right.interpreter(var);
+    }
+
+}
+```
+
+**减法解析器**
+
+```java
+public class SubExpression extends SymbolExpression {
+
+    public SubExpression(Expression left, Expression right) {
+        super(left, right);
+    }
+
+    public int interpreter(HashMap<String, Integer> var) {
+        return super.left.interpreter(var) - super.right.interpreter(var);
+    }
+
+}
+```
+
+**Client客户端**
+
+```java
+public class Client {
+
+    public static void main(String[] args) throws IOException {
+        String expStr = getExpStr();
+        HashMap<String, Integer> var = getValue(expStr);
+        Calculator calculator = new Calculator(expStr);
+        System.out.println("运算结果：" + expStr + "=" + calculator.run(var));
+    }
+
+    //获得表达式
+    public static String getExpStr() throws IOException {
+        System.out.print("请输入表达式：");
+        return (new BufferedReader(new InputStreamReader(System.in))).readLine();
+    }
+
+    //获得值映射
+    public static HashMap<String, Integer> getValue(String expStr) throws IOException {
+        HashMap<String, Integer> map = new HashMap<>();
+
+        for(char ch : expStr.toCharArray()) {
+            if(ch != '+' && ch != '-' ) {
+                if(! map.containsKey(String.valueOf(ch))) {
+                    System.out.print("请输入" + String.valueOf(ch) + "的值：");
+                    String in = (new BufferedReader(new InputStreamReader(System.in))).readLine();
+                    map.put(String.valueOf(ch), Integer.valueOf(in));
+                }
+            }
+        }
+
+        return map;
+    }
+
+}
+```
+
+##### 应用
+
+Spring中SpelExpressionParser就用到了解析器模式
+
+<img src="README.assets/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQyMzM5MjEw,size_16,color_FFFFFF,t_70-20210604172714384.png" alt="在这里插入图片描述" style="zoom: 50%;" />
+
+1. 当有一个语言需要解释执行，可将该语言中的句子表示为一个抽象语法树，就可以考虑使用解释器模式，让程序具有良好的扩展性
+2. 应用场景：编译器、运算表达式计算、正则表达式、机器人等
+3. 使用解释器可能带来的问题：解释器模式会引起类膨胀、解释器模式采用递归调用方法，将会导致调试非常复杂、效率可能降低.
+
+#### 状态模式 State
