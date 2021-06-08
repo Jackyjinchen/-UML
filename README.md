@@ -978,3 +978,12 @@ Spring中SpelExpressionParser就用到了解析器模式
 3. 使用解释器可能带来的问题：解释器模式会引起类膨胀、解释器模式采用递归调用方法，将会导致调试非常复杂、效率可能降低.
 
 #### 状态模式 State
+
+符合开闭原则，容易增删状态。会产生很多类，加大维护工作。
+
+<img src="README.assets/state_pattern_uml_diagram-20210608145954132.png" alt="状态模式的 UML 图"  />
+
+#### 策略模式  Strategy
+
+<img src="README.assets/image-20210608165042070.png" alt="image-20210608165042070" style="zoom:50%;" />
+
