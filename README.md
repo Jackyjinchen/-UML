@@ -985,5 +985,42 @@ Spring中SpelExpressionParser就用到了解析器模式
 
 #### 策略模式  Strategy
 
+对修改关闭，对扩展开放。提供了可以替换继承关系的办法，算法封装在独立的Strategy类中独立于Contentext来改变。
+
 <img src="README.assets/image-20210608165042070.png" alt="image-20210608165042070" style="zoom:50%;" />
+
+JDK中Arrays的Comparator
+
+```java
+//Arrays.sort方法中的Comparator就是采取了策略器模式
+Comparator<Integer> comparator = new Comparator<Integer>() {
+  public int compare(Integer o1, Integer o2) {
+    if(o1 > o2) {
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+}
+Arrays.sort(data, comparator);
+
+//也可通过lambda表达式来实现
+Arrays.sort(data, (var1, var2) -> {
+  if(var1.compareTo(var2) > 0){
+    return 1;
+  } else {
+    return -1;
+  }
+})
+```
+
+#### 职责链模式 Chain of Responsibility
+
+将请求和处理分开，实现解耦，提高系统灵活性。简化对象，对象无需知道链的结构。适用于多级请求、审批流程、拦截器等。
+
+<img src="README.assets/1002892-20181109183928782-1661291050.png" alt="img" style="zoom: 50%;" />
+
+SpringMVC-HandlerExecutionChain中采用了职责链模式
+
+![img](README.assets/50e3011b6b64dda001127245fa957e4d1012012f.png@1320w_746h.webp)
 
