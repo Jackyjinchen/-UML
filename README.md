@@ -199,13 +199,13 @@ java中java.lang.Runtime 就是单例模式
 可能造成内存浪费，避免了多线程同步问题
 
 ```java
-class Singleton() {
+class Singleton {
     // 构造器私有化
     private Singleton() {}
     //本类创建
     private final static Singleton instance = new Singleton();
     //提供getter
-    public getInstance() {
+    public static Singleton getInstance() {
         return instance;
     }
     
@@ -217,14 +217,14 @@ class Singleton() {
 同理造成内存浪费
 
 ```java
-class Singleton() {
+class Singleton {
     private static Singleton instance;
     //通过静态代码块创建单例对象
     static {
         instance = new Singleton();
     }
     //提供getter
-    public getInstance() {
+    public static Singleton getInstance() {
         return instance;
     }
     
@@ -234,7 +234,7 @@ class Singleton() {
 ##### 3. 懒汉式（线程不安全）
 
 ```java
-class Singleton() {
+class Singleton {
     private static Singleton instance;
     private Singleton() {}
     //提供getter
@@ -253,7 +253,7 @@ class Singleton() {
 方法同步效率太低
 
 ```java
-class Singleton() {
+class Singleton {
     private static Singleton instance;
     private Singleton() {}
     //提供getter
