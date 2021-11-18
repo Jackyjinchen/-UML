@@ -4,15 +4,16 @@ package _01_Singleton;
  * @Version 1.0
  * @Author: jackyjinchen
  * @Date: 2021/11/18
- * @Content:
+ * @Content: 懒汉式（线程不安全）
  */
-class Singleton {
-    private static Singleton instance;
-    private Singleton() {}
+class Singleton3 {
+    private static Singleton3 instance;
+    private Singleton3() {}
     //提供getter
-    public static Singleton getInstance() {
+    public static Singleton3 getInstance() {
         if(instance == null) {
-            instance = new Singleton();
+            System.out.println("没有，new一个 懒汉式（线程不安全）");
+            instance = new Singleton3();
         }
         return instance;
     }

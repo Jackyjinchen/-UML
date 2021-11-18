@@ -270,7 +270,7 @@ class Singleton {
 ##### 5. 双重检查
 
 ```java
-class Singleton() {
+class Singleton {
     //volatile 禁止指令重排
     private static volatile Singleton instance;
     private Singleton() {}
@@ -290,7 +290,7 @@ class Singleton() {
 ##### **6. 静态内部类**
 
 ```java
-class Singleton() {
+class Singleton {
   private Singleton() {}
   //懒加载 线程安全 静态内部类
   public static class SingletonInstance {
@@ -310,7 +310,7 @@ class Singleton() {
 enum Singleton {
   //属性单一
   INSTANCE;
-  public vod sayOK() {}
+  public void sayOK() {}
 }
 ```
 
@@ -392,7 +392,7 @@ public abstract class Shape implements Cloneable {
 
 ```java
 // 深拷贝
-public class DeepProtoType impements Serializable, Cloneable {
+public class DeepProtoType implements Serializable, Cloneable {
   public DeepCloneableTarget deepCloneableTarget; //引用类型
   
   // 方法1
@@ -403,7 +403,7 @@ public class DeepProtoType impements Serializable, Cloneable {
       //基本数据属性克隆
       clone = super.clone();
       //对应用类型的属性，进行单独处理
-      DeepProtoType deep = (DeepProtoType)deep;
+      DeepProtoType deep = (DeepProtoType)clone;
       deep.deepCloneableTarget = (DeepCloneableTarget)deepCloneableTarget.clone();
     } catch (CloneNotSupportedException e) {
       e.printStackTrace();
@@ -445,7 +445,7 @@ java中的StringBuilder就是建造者模式
 （1） 抽象产品类 computer。
 （2） Builder 抽象 Builder，规范产品的组建，一般是由子类实现具体的组建过程。
 （3）MacbookBuilder 具体的Builder类，具体的创建对象的类。
-（4） Directror 统一组建过程。
+（4） Director 统一组建过程。
 
 ### 结构型模式
 
@@ -453,7 +453,7 @@ java中的StringBuilder就是建造者模式
 
 将某个类的接口转换成客户端期望的另一个接口表示，主要目的是**兼容性**，别名包装器（Wrapper）。
 
-SpinrgMVC 中的HandlerAdapter是使用适配器模式实现的
+SpringMVC 中的 HandlerAdapter 是使用适配器模式实现的
 
 (1). 目标（Target）接口：当前系统业务所期待的接口，它可以是抽象类或接口。
 (2). 适配者（Adaptee）类：它是被访问和适配的现存组件库中的组件接口。
